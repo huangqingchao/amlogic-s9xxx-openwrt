@@ -234,7 +234,7 @@ on:
         options:
           - ophub
           - angel
-          - yourname
+          - huangqc
 
 env:
   TZ: America/New_York
