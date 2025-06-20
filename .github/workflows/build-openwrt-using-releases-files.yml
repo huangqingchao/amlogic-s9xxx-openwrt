@@ -324,23 +324,24 @@ jobs:
           ln -sf /builder/openwrt ${GITHUB_WORKSPACE}/openwrt
           ln -sf /builder/openwrt /home/runner/work/_actions/ophub/amlogic-s9xxx-openwrt/main/openwrt
 
-          latest_version=$(curl -s \
-                -H "Accept: application/vnd.github+json" \
-                -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-                https://api.github.com/repos/${GITHUB_REPOSITORY}/releases?per_page=100 | \
-                jq -r --arg RTK "OpenWrt_${{ inputs.source_branch }}_" \
-                --arg BOARD "-rootfs.tar.gz" \
-                '[.[] | select(.tag_name | contains($RTK))] |
-                map(.assets[] | select(.browser_download_url | endswith($BOARD))) |
-                sort_by(.updated_at) |
-                reverse |
-                .[0] |
-                {data: .updated_at, url: .browser_download_url}')
+          #latest_version=$(curl -s \
+          #      -H "Accept: application/vnd.github+json" \
+          #      -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+          #      https://api.github.com/repos/${GITHUB_REPOSITORY}/releases?per_page=100 | \
+          #      jq -r --arg RTK "OpenWrt_${{ inputs.source_branch }}_" \
+          #      --arg BOARD "-rootfs.tar.gz" \
+          #      '[.[] | select(.tag_name | contains($RTK))] |
+          #      map(.assets[] | select(.browser_download_url | endswith($BOARD))) |
+          #      sort_by(.updated_at) |
+          #      reverse |
+          #      .[0] |
+          #      {data: .updated_at, url: .browser_download_url}')
 
-          [[ -z "${latest_version}" || "${latest_version}" == "null" ]] && echo "Invalid OpenWrt rootfs download address." && exit 1
-          latest_updated_at="$(echo ${latest_version} | jq -r '.data')"
-          latest_url="$(echo ${latest_version} | jq -r '.url')"
+          #[[ -z "${latest_version}" || "${latest_version}" == "null" ]] && echo "Invalid OpenWrt rootfs download address." && exit 1
+          #latest_updated_at="$(echo ${latest_version} | jq -r '.data')"
+          #latest_url="$(echo ${latest_version} | jq -r '.url')"
 
+          latest_url="https://downloads.immortalwrt.org/releases/24.10-SNAPSHOT/targets/armsr/armv8/immortalwrt-24.10-snapshot-r33216-6cfe87b79b-armsr-armv8-rootfs.tar.gz"
           openwrt_filename="${latest_url##*/}"
           curl -fsSL "${latest_url}" -o "${armsr_tarfile_path}/${openwrt_filename}"
           [[ "${?}" -ne "0" ]] && echo "Invalid OpenWrt rootfs download address." && exit 1
