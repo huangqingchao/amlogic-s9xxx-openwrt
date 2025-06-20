@@ -240,7 +240,7 @@ on:
         options:
           - ophub
           - angel
-          - yourname
+          - huangqc
 
 env:
   TZ: Etc/UTC
